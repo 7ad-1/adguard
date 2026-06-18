@@ -36,15 +36,7 @@ jobs:
     - name: Build Debug APK
       run: |
         chmod +x gradlew
-        ./gradlew assembleDebug --no-daemon --stacktrace > build-output.log 2>&1 || { cat build-output.log; exit 1; }
-
-    - name: Upload Build Log
-      if: always()
-      uses: actions/upload-artifact@v4
-      with:
-        name: build-log
-        path: build-output.log
-        retention-days: 30
+        ./gradlew assembleDebug --no-daemon --stacktrace
 
     - name: Upload APK artifact
       if: success()
