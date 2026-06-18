@@ -36,7 +36,16 @@ jobs:
     - name: Build Debug APK
       run: |
         chmod +x gradlew
-        ./gradlew assembleDebug --no-daemon --stacktrace
+        ./gradlew assembleDebug --no-daemon --stacktrace 2>&1 | tee build-output.log
+        echo "BUILD_EXIT_CODE=$?" >> $GITHUB_ENV
+
+    - name: Upload Build Log
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-log
+        path: build-output.log
+        retention-days: 30
 
     - name: Upload APK artifact
       if: success()
