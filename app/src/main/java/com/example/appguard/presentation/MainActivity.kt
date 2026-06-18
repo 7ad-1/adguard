@@ -8,7 +8,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.example.appguard.presentation.navigation.Navigation
-import com.example.appguard.presentation.theme.AppGuardTheme
+import com.example.appguard.presentation.ui.theme.AppGuardTheme
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : ComponentActivity() {
