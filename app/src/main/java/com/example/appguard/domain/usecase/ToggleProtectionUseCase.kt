@@ -7,7 +7,7 @@ class ToggleProtectionUseCase(
     private val getSettings: GetSettingsUseCase,
     private val saveSettings: SaveSettingsUseCase
 ) {
-    operator fun invoke(enabled: Boolean): AppGuardSettings {
+    suspend operator fun invoke(enabled: Boolean): AppGuardSettings {
         val current = getSettings()
         val updated = current.copy(isProtectionEnabled = enabled)
         saveSettings(updated)

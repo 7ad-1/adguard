@@ -1,24 +1,23 @@
 package com.example.appguard.accessibility
 
 import android.accessibilityservice.AccessibilityService
-import android.accessibilityservice.AccessibilityServiceInfo
-import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.util.Log
 import android.view.accessibility.AccessibilityEvent
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleRegistry
-import com.example.appguard.AppGuardApplication
+import kotlinx.coroutines.runBlocking
 import com.example.appguard.domain.model.AppGuardSettings
 import com.example.appguard.domain.usecase.GetSettingsUseCase
-import org.koin.core.koin
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-class AppGuardAccessibilityService : AccessibilityService() {
+class AppGuardAccessibilityService : AccessibilityService(), KoinComponent {
 
     private val lifecycleRegistry = LifecycleRegistry(this)
     private var settings: AppGuardSettings = AppGuardSettings()
     private var lastTargetPackage: String? = null
+    private val getSettingsUseCase: GetSettingsUseCase by inject()
 
     override fun onCreate() {
         super.onCreate()
@@ -44,7 +43,6 @@ class AppGuardAccessibilityService : AccessibilityService() {
                 }
             }
             AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED -> {
-                // Additional check for content changes
             }
         }
     }
@@ -60,8 +58,7 @@ class AppGuardAccessibilityService : AccessibilityService() {
 
     private fun loadSettings() {
         try {
-            val getSettings = koin.get<GetSettingsUseCase>()
-            settings = getSettings()
+            settings = runBlocking { getSettingsUseCase() }
         } catch (e: Exception) {
             Log.e("AppGuard", "Failed to load settings", e)
         }

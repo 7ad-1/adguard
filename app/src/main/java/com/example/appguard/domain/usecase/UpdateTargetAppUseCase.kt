@@ -7,7 +7,7 @@ class UpdateTargetAppUseCase(
     private val getSettings: GetSettingsUseCase,
     private val saveSettings: SaveSettingsUseCase
 ) {
-    operator fun invoke(packageName: String?, label: String?): AppGuardSettings {
+    suspend operator fun invoke(packageName: String?, label: String?): AppGuardSettings {
         val current = getSettings()
         val updated = current.copy(
             targetPackageName = packageName,

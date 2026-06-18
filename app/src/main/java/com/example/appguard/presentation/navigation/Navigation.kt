@@ -19,8 +19,8 @@ fun AppNavHost(
     onRequestAccessibilityPermission: () -> Unit,
     viewModel: MainViewModel = koinViewModel()
 ) {
-    val settings by viewModel.settings
-    val installedApps by viewModel.installedApps
+    val settings = viewModel.settings
+    val installedApps = viewModel.installedApps
 
     NavHost(navController = navController, startDestination = "main") {
         composable("main") {

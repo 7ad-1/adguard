@@ -7,7 +7,7 @@ class UpdateConfirmationCountUseCase(
     private val getSettings: GetSettingsUseCase,
     private val saveSettings: SaveSettingsUseCase
 ) {
-    operator fun invoke(count: Int): AppGuardSettings {
+    suspend operator fun invoke(count: Int): AppGuardSettings {
         val current = getSettings()
         val clampedCount = count.coerceIn(1, 50)
         val updated = current.copy(confirmationCount = clampedCount)

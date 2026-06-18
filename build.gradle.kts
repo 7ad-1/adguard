@@ -1,6 +1,5 @@
 buildscript {
     val kotlinVersion = "2.0.20"
-    val composeCompilerVersion = "1.5.14"
     val agpVersion = "8.5.2"
     
     dependencies {
@@ -15,13 +14,6 @@ plugins {
     id("org.jetbrains.kotlin.plugin.compose") version "2.0.20" apply false
 }
 
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
-
 tasks.register("clean", Delete::class) {
-    delete(rootProject.buildDir)
+    delete(rootProject.layout.buildDirectory)
 }
