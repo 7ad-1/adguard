@@ -3,8 +3,6 @@ name: Build APK
 on:
   push:
     branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
   workflow_dispatch:
 
 jobs:
@@ -24,22 +22,19 @@ jobs:
     - name: Setup Android SDK
       uses: android-actions/setup-android@v3
 
-    - name: Accept Android SDK licenses
-      run: yes | sdkmanager --licenses || true
+    - name: Accept licenses and install SDK
+      run: |
+        yes | sdkmanager --licenses || true
+        sdkmanager "platforms;android-35" "build-tools;35.0.0"
 
-    - name: Install Android SDK platforms and build tools
-      run: sdkmanager "platforms;android-35" "build-tools;35.0.0"
+    - name: Make gradlew executable
+      run: chmod +x gradlew
 
-    - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v4
+    - name: Check Gradle version
+      run: ./gradlew --version
 
     - name: Build Debug APK
-      run: |
-        chmod +x gradlew
-        echo "=== Checking Gradle wrapper ==="
-        ./gradlew --version
-        echo "=== Starting build ==="
-        ./gradlew assembleDebug --no-daemon --stacktrace 2>&1 | tail -100
+      run: ./gradlew assembleDebug --no-daemon --stacktrace
 
     - name: Upload APK artifact
       if: success()
