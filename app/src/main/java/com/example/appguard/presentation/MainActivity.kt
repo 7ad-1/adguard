@@ -1,6 +1,5 @@
 package com.example.appguard.presentation
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -12,13 +11,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.ViewModelProvider
 import com.example.appguard.presentation.ui.theme.AppGuardTheme
 import com.example.appguard.presentation.navigation.AppNavHost
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.java.KoinJavaComponent.inject
 
 class MainActivity : ComponentActivity() {
 
-    private val mainViewModel: MainViewModel by viewModel()
+    private val mainViewModel: MainViewModel by lazy {
+        val factory: ViewModelProvider.Factory by inject()
+        ViewModelProvider(this, factory)[MainViewModel::class.java]
+    }
 
     private val overlayPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -42,7 +45,8 @@ class MainActivity : ComponentActivity() {
                 ) {
                     AppNavHost(
                         onRequestOverlayPermission = { requestOverlayPermission() },
-                        onRequestAccessibilityPermission = { requestAccessibilityPermission() }
+                        onRequestAccessibilityPermission = { requestAccessibilityPermission() },
+                        viewModel = mainViewModel
                     )
                 }
             }

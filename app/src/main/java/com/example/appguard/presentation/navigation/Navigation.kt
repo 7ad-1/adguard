@@ -1,8 +1,6 @@
 package com.example.appguard.presentation.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -10,14 +8,13 @@ import androidx.navigation.compose.rememberNavController
 import com.example.appguard.presentation.MainViewModel
 import com.example.appguard.presentation.ui.AppPickerScreen
 import com.example.appguard.presentation.ui.MainScreen
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun AppNavHost(
     navController: NavHostController = rememberNavController(),
     onRequestOverlayPermission: () -> Unit,
     onRequestAccessibilityPermission: () -> Unit,
-    viewModel: MainViewModel = koinViewModel()
+    viewModel: MainViewModel
 ) {
     val settings = viewModel.settings
     val installedApps = viewModel.installedApps

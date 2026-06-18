@@ -1,8 +1,6 @@
 package com.example.appguard.presentation
 
 import android.app.Application
-import android.content.Intent
-import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import androidx.compose.runtime.getValue
@@ -18,7 +16,7 @@ import com.example.appguard.domain.usecase.SaveSettingsUseCase
 import com.example.appguard.domain.usecase.ToggleProtectionUseCase
 import com.example.appguard.domain.usecase.UpdateConfirmationCountUseCase
 import com.example.appguard.domain.usecase.UpdateTargetAppUseCase
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class MainViewModel(
@@ -64,7 +62,7 @@ class MainViewModel(
 
     private fun observeSettings() {
         viewModelScope.launch {
-            getSettings.observe().collect { newSettings ->
+            getSettings.observe().collectLatest { newSettings ->
                 settings = newSettings
             }
         }
