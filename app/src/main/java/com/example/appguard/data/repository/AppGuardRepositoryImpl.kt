@@ -73,7 +73,7 @@ class AppGuardRepositoryImpl(private val context: Context) : AppGuardRepository 
         val launcherIntent = Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER)
         val launchableApps = pm.queryIntentActivities(launcherIntent, 0)
         
-        val launchablePackages = launchableApps.map { it.activityInfo.packageName }.toSet()
+        val launchablePackages = launchableApps.mapNotNull { it.activityInfo?.packageName }.toSet()
         
         return apps
             .filter { it.packageName in launchablePackages }
