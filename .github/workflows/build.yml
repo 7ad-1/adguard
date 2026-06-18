@@ -28,17 +28,13 @@ jobs:
       run: yes | sdkmanager --licenses || true
 
     - name: Install Android SDK platforms and build tools
-      run: |
-        sdkmanager "platforms;android-35" "build-tools;35.0.0"
+      run: sdkmanager "platforms;android-35" "build-tools;35.0.0"
 
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
-
-    - name: Validate Gradle wrapper
-      run: ./gradlew --version || echo "GRADLE WRAPPER FAILED"
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@v4
 
     - name: Build Debug APK
-      run: ./gradlew assembleDebug --stacktrace 2>&1 | tail -200
+      run: ./gradlew assembleDebug --stacktrace
 
     - name: Upload APK artifact
       if: success()
