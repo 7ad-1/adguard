@@ -4,36 +4,27 @@ import android.accessibilityservice.AccessibilityService
 import android.content.Intent
 import android.util.Log
 import android.view.accessibility.AccessibilityEvent
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleRegistry
 import kotlinx.coroutines.runBlocking
 import com.example.appguard.domain.model.AppGuardSettings
 import com.example.appguard.domain.usecase.GetSettingsUseCase
+import com.example.appguard.presentation.ConfirmationActivity
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 class AppGuardAccessibilityService : AccessibilityService(), KoinComponent {
 
-    private val lifecycleRegistry = LifecycleRegistry(this)
     private var settings: AppGuardSettings = AppGuardSettings()
     private var lastTargetPackage: String? = null
     private val getSettingsUseCase: GetSettingsUseCase by inject()
 
-    override fun onCreate() {
-        super.onCreate()
-        lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_CREATE)
-        loadSettings()
-    }
-
     override fun onServiceConnected() {
         super.onServiceConnected()
-        lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_START)
         loadSettings()
     }
 
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
         if (!settings.isProtectionEnabled || settings.targetPackageName == null) return
-        
+
         when (event.eventType) {
             AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED -> {
                 val packageName = event.packageName?.toString()
@@ -42,19 +33,10 @@ class AppGuardAccessibilityService : AccessibilityService(), KoinComponent {
                     showConfirmationScreen()
                 }
             }
-            AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED -> {
-            }
         }
     }
 
-    override fun onInterrupt() {
-        lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-    }
-
-    override fun onDestroy() {
-        lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-        super.onDestroy()
-    }
+    override fun onInterrupt() {}
 
     private fun loadSettings() {
         try {

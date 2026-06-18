@@ -1,8 +1,5 @@
 package com.example.appguard.domain.model
 
-import kotlinx.serialization.Serializable
-
-@Serializable
 data class AppGuardSettings(
     val targetPackageName: String? = null,
     val targetAppLabel: String? = null,
