@@ -20,9 +20,11 @@ import kotlinx.serialization.json.Json
 private val SETTINGS_KEY = PreferencesKeys.stringKey("app_guard_settings")
 private val JSON = Json { ignoreUnknownKeys = true }
 
+private val Context.dataStore by preferencesDataStore(name = "app_guard_settings")
+
 class AppGuardRepositoryImpl(private val context: Context) : AppGuardRepository {
 
-    private val dataStore = context.preferencesDataStore("app_guard_settings")
+    private val dataStore get() = context.dataStore
 
     override suspend fun getSettings(): AppGuardSettings {
         val prefs = dataStore.data.first()

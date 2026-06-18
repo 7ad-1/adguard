@@ -36,8 +36,7 @@ jobs:
     - name: Build Debug APK
       run: |
         chmod +x gradlew
-        ./gradlew assembleDebug --no-daemon --stacktrace 2>&1 | tee build-output.log
-        echo "BUILD_EXIT_CODE=$?" >> $GITHUB_ENV
+        ./gradlew assembleDebug --no-daemon --stacktrace > build-output.log 2>&1 || { cat build-output.log; exit 1; }
 
     - name: Upload Build Log
       if: always()
