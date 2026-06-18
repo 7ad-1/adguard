@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<accessibility-service xmlns:android="http://schemas.android.com/apk/res/android"
+    android:description="@string/accessibility_service_description"
+    android:packageNames=""
+    android:accessibilityEventTypes="typeWindowStateChanged|typeWindowContentChanged|typeNotifications"
+    android:accessibilityFeedbackType="typesWindowState|typesWindowContent"
+    android:accessibilityFlags="flagReportViewIds|flagIncludeNotImportantViews"
+    android:canRetrieveWindowContent="true"
+    android:canRequestTouchExploration="false"
+    android:canRequestEnhancedWebAccessibility="false"
+    android:settingsActivity="com.example.appguard.presentation.MainActivity" />
