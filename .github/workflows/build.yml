@@ -33,11 +33,22 @@ jobs:
     - name: Grant execute permission
       run: chmod +x gradlew
 
+    - name: Validate Gradle wrapper
+      run: ./gradlew --version
+
     - name: Build Debug APK
-      run: ./gradlew assembleDebug --no-daemon --stacktrace 2>&1
+      run: ./gradlew assembleDebug --no-daemon 2>&1 | tee build.log; echo "EXIT_CODE=$?" >> $GITHUB_ENV
+
+    - name: Upload build log
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-log
+        path: build.log
+        retention-days: 5
 
     - name: Upload APK artifact
-      if: success()
+      if: env.EXIT_CODE == '0'
       uses: actions/upload-artifact@v4
       with:
         name: appguard-debug
@@ -45,7 +56,7 @@ jobs:
         retention-days: 30
 
     - name: Create Release
-      if: github.ref == 'refs/heads/master' && success()
+      if: github.ref == 'refs/heads/master' && env.EXIT_CODE == '0'
       uses: softprops/action-gh-release@v1
       with:
         tag_name: build-${{ github.run_number }}
